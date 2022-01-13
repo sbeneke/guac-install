@@ -192,7 +192,25 @@ for file in /etc/guacamole/extensions/guacamole-auth-duo*.jar; do
         tar -xzf guacamole-auth-duo-${GUACVERSION}.tar.gz
         cp guacamole-auth-duo-${GUACVERSION}/guacamole-auth-duo-${GUACVERSION}.jar /etc/guacamole/extensions/
         echo -e "${GREEN}Duo copied to extensions.${NC}"
+        break
+    fi
+done
 
+for file in /etc/guacamole/extensions/guacamole-auth-ldap*.jar; do
+    if [[ -f $file ]]; then
+        # Upgrade LDAP
+        echo -e "${BLUE}LDAP extension was found, upgrading...${NC}"
+        rm /etc/guacamole/extensions/guacamole-auth-ldap*.jar
+        wget -q --show-progress -O guacamole-auth-ldap-${GUACVERSION}.tar.gz ${SERVER}/binary/guacamole-auth-ldap-${GUACVERSION}.tar.gz
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}Failed to download guacamole-auth-ldap-${GUACVERSION}.tar.gz"
+            echo -e "${SERVER}/binary/guacamole-auth-ldap-${GUACVERSION}.tar.gz"
+            exit 1
+        fi
+        echo -e "${GREEN}Downloaded guacamole-auth-ldap-${GUACVERSION}.tar.gz${NC}"
+        tar -xzf guacamole-auth-ldap-${GUACVERSION}.tar.gz
+        cp guacamole-auth-ldap-${GUACVERSION}/guacamole-auth-ldap-${GUACVERSION}.jar /etc/guacamole/extensions/
+        echo -e "${GREEN}LDAP copied to extensions.${NC}"
         break
     fi
 done
